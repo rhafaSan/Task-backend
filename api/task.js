@@ -11,16 +11,18 @@ module.exports = app => {
       .catch(err => res.status(400).json(err))
   }
 
-  const save = (req,res) => {
-    if(!req.body.desc.trim()){
-      return res.status(400).send('Descrição obrigatória')
+  const save = (req, res) => {
+    if (!req.body.desc.trim()) {
+        return res.status(400).send('Descrição é um campo obrigatório')
     }
 
     req.body.userId = req.user.id
 
-    app.db('tasks').insert(req.body).then(_=> res.status(204).send())
-    .catch(err => res.status(400).json(err))
-  }
+    app.db('tasks')
+        .insert(req.body)
+        .then(_ => res.status(204).send())
+        .catch(err => res.status(400).json(err))
+}
 
   const remove = (req,res) => {
     app.db('tasks').where({ id: req.params.id, userId: req.user.id })
